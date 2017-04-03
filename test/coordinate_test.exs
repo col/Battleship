@@ -35,6 +35,14 @@ defmodule BattleshipEngine.CoordinateTest do
     assert :battleship == Coordinate.in_ship(coord)
   end
 
+  test "#set_all_in_ship" do
+    {:ok, coord1} = Coordinate.start_link
+    {:ok, coord2} = Coordinate.start_link
+    assert :ok = Coordinate.set_all_in_ship([coord1, coord2], :battleship)
+    assert :battleship = Coordinate.in_ship(coord1)
+    assert :battleship = Coordinate.in_ship(coord2)
+  end
+
   test "#to_string" do
     {:ok, coord} = Coordinate.start_link
     assert "(in_ship:none, guessed:false)" == Coordinate.to_string(coord)

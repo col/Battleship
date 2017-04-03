@@ -31,6 +31,10 @@ defmodule BattleshipEngine.Coordinate do
     Agent.update(coord, &(Map.put(&1, :in_ship, ship)))
   end
 
+  def set_all_in_ship(coords, ship) do
+    Enum.each(coords, &(Coordinate.set_in_ship(&1, ship)))
+  end
+
   def to_string(coord) do
     "(in_ship:#{in_ship(coord)}, guessed:#{guessed?(coord)})"
   end
