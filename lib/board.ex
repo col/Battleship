@@ -45,4 +45,14 @@ defmodule BattleshipEngine.Board do
     |> Coordinate.set_in_ship(ship)
   end
 
+  def to_string(board) do
+    "%{"<>string_body(board)<>"}"
+  end
+
+  defp string_body(board) do
+    Enum.reduce(keys(), "", fn(key, acc) ->
+      coord = Agent.get(board, &(Map.fetch!(&1, key)))
+      acc <> ":#{key} => #{Coordinate.to_string(coord)}, \n"
+    end)
+  end
 end

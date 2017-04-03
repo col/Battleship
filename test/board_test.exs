@@ -34,4 +34,11 @@ defmodule BattleshipEngine.BoardTest do
     assert :ok == Board.set_coordinate_in_ship(board, :a1, :destroyer)
     assert :destroyer == Board.coordinate_ship(board, :a1)
   end
+
+  test "#to_string" do
+    {:ok, board} = Board.start_link
+    assert String.starts_with?(Board.to_string(board), "%{:a1 => (in_ship:none, guessed:false), \n")
+    assert String.ends_with?(Board.to_string(board), ":j10 => (in_ship:none, guessed:false), \n}")
+  end
+
 end
