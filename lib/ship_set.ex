@@ -25,6 +25,9 @@ defmodule BattleshipEngine.ShipSet do
     Ship.replace_coordinates(ship, coordinates)
   end
 
+  def sunk?(ship_set, :none), do: false
+  def sunk?(ship_set, ship_key), do: ShipSet.get_ship(ship_set, ship_key) |> Ship.sunk?
+
   defp keys do
     %ShipSet{}
     |> Map.from_struct

@@ -32,8 +32,23 @@ defmodule BattleshipEngine.ShipSetTest do
     {:ok, coord} = Coordinate.start_link
     ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
     assert :battleship == Coordinate.in_ship(coord)
-    ShipSet.set_ship_coordinates(ship_set, :battleship, [])    
+    ShipSet.set_ship_coordinates(ship_set, :battleship, [])
     assert :none == Coordinate.in_ship(coord)
+  end
+
+  test "#sunk? - when false" do
+    {:ok, ship_set} = ShipSet.start_link
+    {:ok, coord} = Coordinate.start_link
+    ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
+    assert ShipSet.sunk?(ship_set, :battleship) == false
+  end
+
+  test "#sunk? - when true" do
+    {:ok, ship_set} = ShipSet.start_link
+    {:ok, coord} = Coordinate.start_link
+    ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
+    Coordinate.guess(coord)
+    assert ShipSet.sunk?(ship_set, :battleship) == true
   end
 
 end
