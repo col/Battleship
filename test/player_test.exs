@@ -50,6 +50,19 @@ defmodule BattleshipEngine.PlayerTest do
     assert :battleship = Player.sunk_ship(player, :a1)
   end
 
+  test "#win? - when game is not won" do
+    {:ok, player} = Player.start_link
+    Player.set_ship_coordinates(player, :battleship, [:a1])
+    assert :no_win = Player.win?(player)
+  end
+
+  test "#win? - when game is won" do
+    {:ok, player} = Player.start_link
+    Player.set_ship_coordinates(player, :battleship, [:a1])
+    Player.guess_coordinate(player, :a1)
+    assert :win = Player.win?(player)
+  end
+
   test "#to_string" do
     {:ok, player} = Player.start_link
     assert String.starts_with?(Player.to_string(player), "%Player{:name => none, \n")

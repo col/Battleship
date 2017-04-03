@@ -52,6 +52,13 @@ defmodule BattleshipEngine.Player do
     end
   end
 
+  def win?(player) do
+    case Player.get_ship_set(player) |> ShipSet.all_sunk? do
+      true -> :win
+      false -> :no_win
+    end
+  end
+
   def to_string(player) do
     "%Player{"<>string_body(player)<>"}"
   end
