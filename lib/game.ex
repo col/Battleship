@@ -42,13 +42,17 @@ defmodule BattleshipEngine.Game do
   end
 
   def handle_call({:guess, player, coordinate}, _from, state) do
-    response = state
-    |> opponent(player)
+    opponent = opponent(state, player)
+    response = opponent
     |> Player.guess_coordinate(coordinate)
+    |> forest_check(opponent, coordinate)
     {:reply, response, state}
   end
 
   defp opponent(state, :player1), do: state.player2
   defp opponent(state, :player2), do: state.player1
+
+  defp forest_check(:miss, _opponent, _coordinate), do: {:miss, :none}
+  defp forest_check(:hit, opponent, coordinate), do: {:hit, Player.sunk_ship(opponent, coordinate)}
 
 end
