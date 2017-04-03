@@ -9,6 +9,21 @@ defmodule BattleshipEngine.GameTest do
     assert is_pid(game_state.player2)
   end
 
+  test "#start_link - registers process with global name" do
+    {:ok, _game} = Game.start_link("Dirk")
+    assert is_map(GenServer.call({:global, "game:Dirk"}, :demo))
+  end
+
+  test "#start_link - cannot have the same name as an existing process" do
+    {:ok, game1} = Game.start_link("Dirk")
+    {:error, {:already_started, _}} = Game.start_link("Dirk")
+  end
+
+  test "#stop" do
+    {:ok, game} = Game.start_link("Dirk")
+    assert :ok = Game.stop(game)
+  end
+
   test "#add_player" do
     {:ok, game} = Game.start_link("Dirk")
     Game.add_player(game, "Gently")

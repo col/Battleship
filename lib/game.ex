@@ -4,8 +4,8 @@ defmodule BattleshipEngine.Game do
 
   defstruct player1: :none, player2: :none
 
-  def start_link(name) when not is_nil(name) do
-    GenServer.start_link(__MODULE__, name)
+  def start_link(name) when is_binary(name) and byte_size(name) > 0 do
+    GenServer.start_link(__MODULE__, name, name: {:global, "game:#{name}"})
   end
 
   def init(name) do
@@ -24,6 +24,10 @@ defmodule BattleshipEngine.Game do
 
   def guess_coordinate(pid, player, coordinate) when is_atom(player) and is_atom(coordinate) do
     GenServer.call(pid, {:guess, player, coordinate})
+  end
+
+  def stop(pid) do
+    GenServer.cast(pid, :stop)
   end
 
   def handle_call(:demo, _from, state) do
@@ -50,6 +54,10 @@ defmodule BattleshipEngine.Game do
     {:reply, response, state}
   end
 
+  def handle_cast(:stop, state) do
+    {:stop, :normal, state}
+  end
+
   defp opponent(state, :player1), do: state.player2
   defp opponent(state, :player2), do: state.player1
 
@@ -57,6 +65,6 @@ defmodule BattleshipEngine.Game do
   defp sunk_check(:hit, opponent, coordinate), do: {:hit, Player.sunk_ship(opponent, coordinate)}
 
   defp win_check({hit_or_miss, :none}, _opponent, _coordinate), do: {hit_or_miss, :none, :no_win}
-  defp win_check({:hit, ship_sunk}, opponent, coordinate),  do: {:hit, ship_sunk, Player.win?(opponent)}
+  defp win_check({:hit, ship_sunk}, opponent, _coordinate),  do: {:hit, ship_sunk, Player.win?(opponent)}
 
 end
