@@ -3,10 +3,10 @@ defmodule BattleshipEngine.Player do
 
   defstruct name: :none, board: :none, ship_set: :none
 
-  def start_link() do
+  def start_link(name \\ :none) do
     {:ok, board} = Board.start_link
     {:ok, ship_set} = ShipSet.start_link
-    Agent.start_link(fn -> %Player{board: board, ship_set: ship_set} end)
+    Agent.start_link(fn -> %Player{name: name, board: board, ship_set: ship_set} end)
   end
 
   def set_name(player, name) do
