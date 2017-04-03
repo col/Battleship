@@ -36,6 +36,11 @@ defmodule BattleshipEngine.ShipSetTest do
     assert :none == Coordinate.in_ship(coord)
   end
 
+  test "#sunk? - when ship has no coords" do
+    {:ok, ship_set} = ShipSet.start_link
+    assert ShipSet.sunk?(ship_set, :battleship) == true
+  end
+
   test "#sunk? - when false" do
     {:ok, ship_set} = ShipSet.start_link
     {:ok, coord} = Coordinate.start_link
@@ -49,6 +54,33 @@ defmodule BattleshipEngine.ShipSetTest do
     ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
     Coordinate.guess(coord)
     assert ShipSet.sunk?(ship_set, :battleship) == true
+  end
+
+  test "#all_sunk? - when not all sunk" do
+    {:ok, ship_set} = ShipSet.start_link
+    {:ok, coord} = Coordinate.start_link
+    ShipSet.set_ship_coordinates(ship_set, :aircraft_carrier, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :cruiser, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer1, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer2, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine1, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine2, [coord])
+    assert ShipSet.all_sunk?(ship_set) == false
+  end
+
+  test "#all_sunk? - when all sunk" do
+    {:ok, ship_set} = ShipSet.start_link
+    {:ok, coord} = Coordinate.start_link
+    ShipSet.set_ship_coordinates(ship_set, :aircraft_carrier, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :cruiser, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer1, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer2, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine1, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine2, [coord])
+    Coordinate.guess(coord)
+    assert ShipSet.all_sunk?(ship_set) == true
   end
 
 end

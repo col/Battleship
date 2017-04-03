@@ -34,6 +34,12 @@ defmodule BattleshipEngine.ShipSet do
     |> Map.keys
   end
 
+  def all_sunk?(ship_set) do
+    Enum.all?(keys(), fn(key) ->
+      ShipSet.get_ship(ship_set, key) |> Ship.sunk?
+    end)
+  end
+
   def to_string(ship_set) do
     "%ShipSet{"<>string_body(ship_set)<>"}"
   end
