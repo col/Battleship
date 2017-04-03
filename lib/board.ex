@@ -5,11 +5,11 @@ defmodule BattleshipEngine.Board do
   @numbers [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   def start_link() do
-    Agent.start_link(fn -> %{} end)
+    Agent.start_link(fn -> initialised_board() end)
   end
 
   defp keys() do
-    for letter <- @letters, number <- @number do
+    for letter <- @letters, number <- @numbers do
       String.to_atom("#{letter}#{number}")
     end
   end
@@ -19,10 +19,6 @@ defmodule BattleshipEngine.Board do
       {:ok, coord} = Coordinate.start_link
       Map.put(board, key, coord)
     end)
-  end
-
-  def start_link() do
-    Agent.start_link(fn -> initialised_board() end)
   end
 
   def get_coordinate(board, key) when is_atom(key) do
