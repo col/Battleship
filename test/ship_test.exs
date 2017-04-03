@@ -14,6 +14,13 @@ defmodule BattleshipEngine.ShipTest do
     assert :ok = Ship.replace_coordinates(ship, coords)
   end
 
+  test "#get_coordinates", %{coords: coords} do
+    {:ok, ship} = Ship.start_link
+    assert [] = Ship.get_coordinates(ship)
+    Ship.replace_coordinates(ship, coords)
+    assert coords == Ship.get_coordinates(ship)
+  end
+
   test "#sunk?", %{coords: coords} do
     {:ok, ship} = Ship.start_link
     Ship.replace_coordinates(ship, coords)

@@ -9,6 +9,10 @@ defmodule BattleshipEngine.Ship do
     Agent.update(ship, fn(_) -> new_coords end)
   end
 
+  def get_coordinates(ship) do
+    Agent.get(ship, &(&1))
+  end
+  
   def sunk?(ship) do
     Agent.get(ship, &(&1))
     |> Enum.all?(&(Coordinate.hit?(&1)))
