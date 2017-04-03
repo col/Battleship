@@ -45,14 +45,18 @@ defmodule BattleshipEngine.Game do
     opponent = opponent(state, player)
     response = opponent
     |> Player.guess_coordinate(coordinate)
-    |> forest_check(opponent, coordinate)
+    |> sunk_check(opponent, coordinate)
+    |> win_check(opponent, coordinate)
     {:reply, response, state}
   end
 
   defp opponent(state, :player1), do: state.player2
   defp opponent(state, :player2), do: state.player1
 
-  defp forest_check(:miss, _opponent, _coordinate), do: {:miss, :none}
-  defp forest_check(:hit, opponent, coordinate), do: {:hit, Player.sunk_ship(opponent, coordinate)}
+  defp sunk_check(:miss, _opponent, _coordinate), do: {:miss, :none}
+  defp sunk_check(:hit, opponent, coordinate), do: {:hit, Player.sunk_ship(opponent, coordinate)}
+
+  defp win_check({hit_or_miss, :none}, _opponent, _coordinate), do: {hit_or_miss, :none, :no_win}
+  defp win_check({:hit, ship_sunk}, opponent, coordinate),  do: {:hit, ship_sunk, Player.win?(opponent)}
 
 end

@@ -27,7 +27,7 @@ defmodule BattleshipEngine.GameTest do
 
   test "#guess_coordinate - when it's a miss" do
     {:ok, game} = Game.start_link("Dirk")
-    assert {:miss, :none} = Game.guess_coordinate(game, :player1, :a1)
+    assert {:miss, :none, :no_win} = Game.guess_coordinate(game, :player1, :a1)
     game_state = GenServer.call(game, :demo)
     assert Player.get_board(game_state.player2) |> Board.get_coordinate(:a1) |> Coordinate.guessed?
   end
@@ -35,13 +35,20 @@ defmodule BattleshipEngine.GameTest do
   test "#guess_coordinate - when it's a hit but doesn't sink the ship" do
     {:ok, game} = Game.start_link("Dirk")
     Game.set_ship_coordinates(game, :player1, :battleship, [:a1, :a2])
-    assert {:hit, :none} = Game.guess_coordinate(game, :player2, :a1)
+    assert {:hit, :none, :no_win} = Game.guess_coordinate(game, :player2, :a1)
   end
 
-  test "#guess_coordinate - when it's a hit and sinks the ship" do
+  test "#guess_coordinate - when it's a hit and sinks the ship but doesn't win the game" do
     {:ok, game} = Game.start_link("Dirk")
     Game.set_ship_coordinates(game, :player1, :battleship, [:a1])
-    assert {:hit, :battleship} = Game.guess_coordinate(game, :player2, :a1)
+    Game.set_ship_coordinates(game, :player1, :cruiser, [:b2])
+    assert {:hit, :battleship, :no_win} = Game.guess_coordinate(game, :player2, :a1)
+  end
+
+  test "#guess_coordinate - when it's a hit and sinks the ship to win the game" do
+    {:ok, game} = Game.start_link("Dirk")
+    Game.set_ship_coordinates(game, :player1, :battleship, [:a1])
+    assert {:hit, :battleship, :win} = Game.guess_coordinate(game, :player2, :a1)
   end
 
 end
