@@ -22,6 +22,10 @@ defmodule BattleshipEngine.Game do
     GenServer.call(pid, {:set_ship_coordinates, player, ship, coordinates})
   end
 
+  def guess_coordinate(pid, player, coordinate) when is_atom(player) and is_atom(coordinate) do
+    GenServer.call(pid, {:guess, player, coordinate})
+  end
+
   def handle_call(:demo, _from, state) do
     {:reply, state, state}
   end
@@ -36,5 +40,15 @@ defmodule BattleshipEngine.Game do
     |> Player.set_ship_coordinates(ship, coordinates)
     {:reply, :ok, state}
   end
+
+  def handle_call({:guess, player, coordinate}, _from, state) do
+    response = state
+    |> opponent(player)
+    |> Player.guess_coordinate(coordinate)
+    {:reply, response, state}
+  end
+
+  defp opponent(state, :player1), do: state.player2
+  defp opponent(state, :player2), do: state.player1
 
 end

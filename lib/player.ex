@@ -35,6 +35,15 @@ defmodule BattleshipEngine.Player do
     |> ShipSet.set_ship_coordinates(ship_key, coordinates)
   end
 
+  def guess_coordinate(player, coordinate_key) when is_atom(coordinate_key) do
+    board = Player.get_board(player)
+    Board.guess_coordinate(board, coordinate_key)
+    case Board.coordinate_hit?(board, coordinate_key) do
+      true -> :hit
+      false -> :miss
+    end
+  end
+
   def to_string(player) do
     "%Player{"<>string_body(player)<>"}"
   end

@@ -26,6 +26,12 @@ defmodule BattleshipEngine.PlayerTest do
     assert :battleship = player |> Player.get_board |> Board.get_coordinate(:a1) |> Coordinate.in_ship
   end
 
+  test "#guess_coordinate" do
+    {:ok, player} = Player.start_link
+    assert :miss = Player.guess_coordinate(player, :a1)
+    assert player |> Player.get_board |> Board.get_coordinate(:a1) |> Coordinate.guessed?
+  end
+
   test "#to_string" do
     {:ok, player} = Player.start_link
     assert String.starts_with?(Player.to_string(player), "%Player{:name => none, \n")

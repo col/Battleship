@@ -1,6 +1,6 @@
 defmodule BattleshipEngine.GameTest do
   use ExUnit.Case
-  alias BattleshipEngine.{Game, Player, ShipSet, Ship, Coordinate}
+  alias BattleshipEngine.{Game, Player, Board, ShipSet, Ship, Coordinate}
 
   test "#start_link" do
     {:ok, game} = Game.start_link("Dirk")
@@ -23,6 +23,13 @@ defmodule BattleshipEngine.GameTest do
     coordinate = Player.get_ship_set(game_state.player1) |> ShipSet.get_ship(:battleship) |> Ship.get_coordinates |> List.first
     assert Coordinate.in_ship(coordinate) == :battleship
     assert Coordinate.guessed?(coordinate) == false
+  end
+
+  test "#guess_coordinate" do
+    {:ok, game} = Game.start_link("Dirk")
+    assert :miss = Game.guess_coordinate(game, :player1, :a1)
+    game_state = GenServer.call(game, :demo)
+    assert Player.get_board(game_state.player2) |> Board.get_coordinate(:a1) |> Coordinate.guessed?
   end
 
 end
