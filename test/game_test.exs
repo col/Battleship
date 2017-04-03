@@ -15,7 +15,7 @@ defmodule BattleshipEngine.GameTest do
   end
 
   test "#start_link - cannot have the same name as an existing process" do
-    {:ok, game1} = Game.start_link("Dirk")
+    {:ok, _game} = Game.start_link("Dirk")
     {:error, {:already_started, _}} = Game.start_link("Dirk")
   end
 
