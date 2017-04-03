@@ -18,12 +18,22 @@ defmodule BattleshipEngine.Game do
     GenServer.call(pid, {:add_player, name})
   end
 
+  def set_ship_coordinates(pid, player, ship, coordinates) when is_atom(player) and is_atom(ship) do
+    GenServer.call(pid, {:set_ship_coordinates, player, ship, coordinates})
+  end
+
   def handle_call(:demo, _from, state) do
     {:reply, state, state}
   end
 
   def handle_call({:add_player, name}, _from, state) do
     Player.set_name(state.player2, name)
+    {:reply, :ok, state}
+  end
+
+  def handle_call({:set_ship_coordinates, player, ship, coordinates}, _from, state) do
+    Map.get(state, player)
+    |> Player.set_ship_coordinates(ship, coordinates)
     {:reply, :ok, state}
   end
 
