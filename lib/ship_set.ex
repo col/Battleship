@@ -1,5 +1,5 @@
 defmodule BattleshipEngine.ShipSet do
-  alias BattleshipEngine.{Ship, ShipSet}
+  alias BattleshipEngine.{Ship, ShipSet, Coordinate}
 
   defstruct aircraft_carrier: :none, battleship: :none, cruiser: :none, destroyer1: :none, destroyer2: :none, submarine1: :none, submarine2: :none
 
@@ -12,6 +12,17 @@ defmodule BattleshipEngine.ShipSet do
       {:ok, ship} = Ship.start_link
       Map.put(set, key, ship)
     end)
+  end
+
+  def get_ship(ship_set, key) when is_atom(key) do
+    Agent.get(ship_set, &(Map.get(&1, key)))
+  end
+
+  def set_ship_coordinates(ship_set, ship_key, coordinates) when is_atom(ship_key) do
+    ship = ShipSet.get_ship(ship_set, ship_key)
+    Coordinate.set_all_in_ship(Ship.get_coordinates(ship), :none)
+    Coordinate.set_all_in_ship(coordinates, ship_key)
+    Ship.replace_coordinates(ship, coordinates)
   end
 
   defp keys do
