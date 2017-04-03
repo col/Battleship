@@ -32,6 +32,24 @@ defmodule BattleshipEngine.PlayerTest do
     assert player |> Player.get_board |> Board.get_coordinate(:a1) |> Coordinate.guessed?
   end
 
+  test "#sunk_ship - when ship there is no ship" do
+    {:ok, player} = Player.start_link
+    assert :none = Player.sunk_ship(player, :a1)
+  end
+
+  test "#sunk_ship - when ship is not sunk" do
+    {:ok, player} = Player.start_link
+    Player.set_ship_coordinates(player, :battleship, [:a1])
+    assert :none = Player.sunk_ship(player, :a1)
+  end
+
+  test "#sunk_ship - when ship is sunk" do
+    {:ok, player} = Player.start_link
+    Player.set_ship_coordinates(player, :battleship, [:a1])
+    Player.guess_coordinate(player, :a1)
+    assert :battleship = Player.sunk_ship(player, :a1)
+  end
+
   test "#to_string" do
     {:ok, player} = Player.start_link
     assert String.starts_with?(Player.to_string(player), "%Player{:name => none, \n")

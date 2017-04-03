@@ -44,6 +44,14 @@ defmodule BattleshipEngine.Player do
     end
   end
 
+  def sunk_ship(player, coordinate_key) do
+    ship_key = Player.get_board(player) |> Board.coordinate_ship(coordinate_key)
+    case Player.get_ship_set(player) |> ShipSet.sunk?(ship_key) do
+      true -> ship_key
+      false -> :none
+    end
+  end
+
   def to_string(player) do
     "%Player{"<>string_body(player)<>"}"
   end
