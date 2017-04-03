@@ -25,6 +25,12 @@ defmodule BattleshipEngine.Board do
     Agent.get(board, &(Map.get(&1, key)))
   end
 
+  def get_coordinates(board, keys) do
+    Enum.map(keys, fn(key) ->
+      Board.get_coordinate(board, key)
+    end)
+  end
+
   def guess_coordinate(board, key) do
     get_coordinate(board, key)
     |> Coordinate.guess

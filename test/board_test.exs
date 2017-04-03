@@ -9,6 +9,13 @@ defmodule BattleshipEngine.BoardTest do
     assert "(in_ship:none, guessed:false)" = Coordinate.to_string(coordinate)
   end
 
+  test "#get_coordinates" do
+    {:ok, board} = Board.start_link
+    coordinates = Board.get_coordinates(board, [:a1, :a2])
+    assert "(in_ship:none, guessed:false)" = coordinates |> List.first |> Coordinate.to_string
+    assert "(in_ship:none, guessed:false)" = coordinates |> List.last |> Coordinate.to_string
+  end
+
   test "#guess_coordinate" do
     {:ok, board} = Board.start_link
     assert :ok == Board.guess_coordinate(board, :a1)
