@@ -26,8 +26,16 @@ defmodule BattleshipEngine.Game do
     GenServer.call(pid, {:guess, player, coordinate})
   end
 
+  def set_ships(pid, player) when is_atom(player) do
+    GenServer.call(pid, {:set_ships, player})
+  end
+
   def stop(pid) do
     GenServer.cast(pid, :stop)
+  end
+
+  def call_demo(pid) do
+    GenServer.call(pid, :demo)
   end
 
   def handle_call(:demo, _from, state) do
@@ -52,6 +60,11 @@ defmodule BattleshipEngine.Game do
     |> sunk_check(opponent, coordinate)
     |> win_check(opponent, coordinate)
     {:reply, response, state}
+  end
+
+  def handle_call({:set_ships, player}, _from, state) do
+    # TODO: Not yet implemented!
+    {:reply, :ok, state}
   end
 
   def handle_cast(:stop, state) do
