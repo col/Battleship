@@ -12,7 +12,18 @@ defmodule BattleshipEngine.GameSupervisorTest do
     {:ok, game1} = GameSupervisor.start_game("game1")
     {:ok, game2} = GameSupervisor.start_game("game2")
     list = GameSupervisor.list_games(GameSupervisor)
-    assert ["game1", "game2"] = list
+    assert Enum.member?(list, "game1")
+    assert Enum.member?(list, "game2")
+    Enum.each([game1, game2], &(Game.stop(&1)))
+  end
+
+  test "#list_open_games - should list all the open games by name" do
+    {:ok, game1} = GameSupervisor.start_game("game1")
+    {:ok, game2} = GameSupervisor.start_game("game2")
+    Game.add_player(game1, "Player 2")
+    list = GameSupervisor.list_open_games(GameSupervisor)
+    assert Enum.member?(list, "game1") == false
+    assert Enum.member?(list, "game2") == true
     Enum.each([game1, game2], &(Game.stop(&1)))
   end
 

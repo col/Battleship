@@ -24,6 +24,22 @@ defmodule BattleshipEngine.GameTest do
     assert :ok = Game.stop(game)
   end
 
+  test "#get_name" do
+    {:ok, game} = Game.start_link("Dirk")
+    assert "Dirk" = Game.get_name(game)
+  end
+
+  test "#is_open? should be true when player2 has not joined" do
+    {:ok, game} = Game.start_link("Dirk")
+    assert Game.is_open?(game)
+  end
+
+  test "#is_open? should be false once player2 has joined" do
+    {:ok, game} = Game.start_link("Dirk")
+    Game.add_player(game, "LeBron")
+    assert Game.is_open?(game) == false
+  end
+
   test "#add_player" do
     {:ok, game} = Game.start_link("Dirk")
     Game.add_player(game, "Gently")

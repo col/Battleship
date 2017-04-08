@@ -38,6 +38,10 @@ defmodule BattleshipEngine.Game do
     GenServer.call(pid, :get_name)
   end
 
+  def is_open?(pid) do
+    GenServer.call(pid, :is_open?)
+  end
+
   def call_demo(pid) do
     GenServer.call(pid, :demo)
   end
@@ -73,6 +77,13 @@ defmodule BattleshipEngine.Game do
 
   def handle_call(:get_name, _from, state) do
     {:reply, Player.get_name(state.player1), state}
+  end
+
+  def handle_call(:is_open?, _from, state) do
+    case Player.get_name(state.player2) do
+      :none -> {:reply, true, state}
+      _ -> {:reply, false, state}
+    end
   end
 
   def handle_cast(:stop, state) do
