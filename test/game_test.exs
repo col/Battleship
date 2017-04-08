@@ -24,6 +24,11 @@ defmodule BattleshipEngine.GameTest do
     assert :ok = Game.stop(game)
   end
 
+  test "#get_id" do
+    {:ok, game} = Game.start_link("Dirk")
+    assert "game:Dirk" = Game.get_id(game)
+  end
+
   test "#get_name" do
     {:ok, game} = Game.start_link("Dirk")
     assert "Dirk" = Game.get_name(game)

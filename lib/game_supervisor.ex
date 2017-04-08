@@ -19,13 +19,13 @@ defmodule BattleshipEngine.GameSupervisor do
 
   def list_games(pid) do
     Supervisor.which_children(pid)
-    |> Enum.map(&(Game.get_name(elem(&1, 1))))
+    |> Enum.map(&(%{game: "game:#{Game.get_name(elem(&1, 1))}", name: Game.get_name(elem(&1, 1))}))    
   end
 
   def list_open_games(pid) do
     Supervisor.which_children(pid)
     |> Enum.filter(&(Game.is_open?(elem(&1, 1))))
-    |> Enum.map(&(Game.get_name(elem(&1, 1))))
+    |> Enum.map(&(%{game: "game:#{Game.get_name(elem(&1, 1))}", name: Game.get_name(elem(&1, 1))}))
   end
 
 end
