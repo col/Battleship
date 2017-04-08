@@ -34,6 +34,10 @@ defmodule BattleshipEngine.Game do
     GenServer.cast(pid, :stop)
   end
 
+  def get_name(pid) do
+    GenServer.call(pid, :get_name)
+  end
+
   def call_demo(pid) do
     GenServer.call(pid, :demo)
   end
@@ -62,9 +66,13 @@ defmodule BattleshipEngine.Game do
     {:reply, response, state}
   end
 
-  def handle_call({:set_ships, player}, _from, state) do
+  def handle_call({:set_ships, _player}, _from, state) do
     # TODO: Not yet implemented!
     {:reply, :ok, state}
+  end
+
+  def handle_call(:get_name, _from, state) do
+    {:reply, Player.get_name(state.player1), state}
   end
 
   def handle_cast(:stop, state) do
