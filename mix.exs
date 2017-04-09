@@ -14,7 +14,7 @@ defmodule BattleshipEngine.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger],
+    [applications: [:logger, :gen_state_machine],
      mod: {BattleshipEngine, []}]
   end
 
@@ -28,6 +28,6 @@ defmodule BattleshipEngine.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [{:gen_state_machine, "~> 2.0"}]
   end
 end

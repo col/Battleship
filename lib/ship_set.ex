@@ -1,7 +1,7 @@
 defmodule BattleshipEngine.ShipSet do
   alias BattleshipEngine.{Ship, ShipSet, Coordinate}
 
-  defstruct aircraft_carrier: :none, battleship: :none, cruiser: :none, destroyer1: :none, destroyer2: :none, submarine1: :none, submarine2: :none
+  defstruct aircraft_carrier: :none, battleship: :none, cruiser: :none, destroyer: :none, submarine: :none
 
   def start_link() do
     Agent.start_link(fn -> initialised_set() end)

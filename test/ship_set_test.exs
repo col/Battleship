@@ -16,7 +16,7 @@ defmodule BattleshipEngine.ShipSetTest do
   test "#to_string" do
     {:ok, ship_set} = ShipSet.start_link
     assert String.starts_with?(ShipSet.to_string(ship_set), "%ShipSet{:aircraft_carrier => [], \n")
-    assert String.ends_with?(ShipSet.to_string(ship_set), ":submarine2 => [], \n}")
+    assert String.ends_with?(ShipSet.to_string(ship_set), ":submarine => [], \n}")
   end
 
   test "#set_ship_coordinates" do
@@ -62,10 +62,8 @@ defmodule BattleshipEngine.ShipSetTest do
     ShipSet.set_ship_coordinates(ship_set, :aircraft_carrier, [coord])
     ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
     ShipSet.set_ship_coordinates(ship_set, :cruiser, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :destroyer1, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :destroyer2, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :submarine1, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :submarine2, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine, [coord])
     assert ShipSet.all_sunk?(ship_set) == false
   end
 
@@ -75,10 +73,8 @@ defmodule BattleshipEngine.ShipSetTest do
     ShipSet.set_ship_coordinates(ship_set, :aircraft_carrier, [coord])
     ShipSet.set_ship_coordinates(ship_set, :battleship, [coord])
     ShipSet.set_ship_coordinates(ship_set, :cruiser, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :destroyer1, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :destroyer2, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :submarine1, [coord])
-    ShipSet.set_ship_coordinates(ship_set, :submarine2, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :destroyer, [coord])
+    ShipSet.set_ship_coordinates(ship_set, :submarine, [coord])
     Coordinate.guess(coord)
     assert ShipSet.all_sunk?(ship_set) == true
   end
